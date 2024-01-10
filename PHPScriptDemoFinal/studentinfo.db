@@ -1,0 +1,15 @@
+-- Create the database
+CREATE DATABASE IF NOT EXISTS studentinfo;
+
+-- Switch to the studentinfo database
+USE studentinfo;
+
+-- Create the users table
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL
+);
+
+-- Insert an example record (optional)
+INSERT INTO users (username, email) VALUES ('JohnDoe', 'john@example.com');
