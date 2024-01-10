@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Operations</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>CRUD Operations</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>Create (Insert)</h2>
+            <form id="createForm">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <button type="button" onclick="createRecord()">Create Record</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Read (Select)</h2>
+            <ul id="recordsList"></ul>
+            <button type="button" onclick="readRecords()">Read Records</button>
+        </section>
+
+        <section>
+            <h2>Update</h2>
+            <form id="updateForm">
+                <label for="updateId">Record ID to Update:</label>
+                <input type="number" id="updateId" name="updateId" required>
+                <label for="newUsername">New Username:</label>
+                <input type="text" id="newUsername" name="newUsername" required>
+                <button type="button" onclick="updateRecord()">Update Record</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Delete</h2>
+            <form id="deleteForm">
+                <label for="deleteId">Record ID to Delete:</label>
+                <input type="number" id="deleteId" name="deleteId" required>
+                <button type="button" onclick="deleteRecord()">Delete Record</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        // JavaScript functions for CRUD operations
+        function createRecord() {
+            var username = document.getElementById('username').value;
+            var email = document.getElementById('email').value;
+
+            // Use fetch to send a POST request to the server
+            fetch('process_form.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=create&username=' + encodeURIComponent(username) + '&email=' + encodeURIComponent(email),
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+                // You can display a success message or handle the response as needed
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function readRecords() {
+            // Use fetch to send a POST request to the server
+            fetch('process_form.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=read',
+            })
+            .then(response => response.json())
+            .then(data => {
+                var recordsList = document.getElementById('recordsList');
+                recordsList.innerHTML = ''; // Clear previous content
+
+                data.forEach(record => {
+                    var li = document.createElement('li');
+                    li.textContent = 'ID: ' + record.id + ' - Username: ' + record.username + ' - Email: ' + record.email;
+                    recordsList.appendChild(li);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function updateRecord() {
+            var updateId = document.getElementById('updateId').value;
+            var newUsername = document.getElementById('newUsername').value;
+
+            // Use fetch to send a POST request to the server
+            fetch('process_form.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=update&id=' + encodeURIComponent(updateId) + '&newUsername=' + encodeURIComponent(newUsername),
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+                // You can display a success message or handle the response as needed
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function deleteRecord() {
+            var deleteId = document.getElementById('deleteId').value;
+
+            // Use fetch to send a POST request to the server
+            fetch('process_form.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=delete&id=' + encodeURIComponent(deleteId),
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+                // You can display a success message or handle the response as needed
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
